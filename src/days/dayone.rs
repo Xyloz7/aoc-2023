@@ -1,9 +1,5 @@
 use crate::common::lines_from_file;
-use std::{
-    fs::File,
-    io::{prelude::*, BufReader},
-    path::Path,
-};
+
 
 fn get_num_from_line(line: String) -> u32 {
     let mut digits = line.chars().filter(|x| x.is_numeric());
@@ -74,7 +70,7 @@ fn combine_u32s(a: u32, b: u32) -> u32 {
 }
 
 pub fn day_one_part2() -> u32 {
-    let lines = lines_from_file("./src/day1_input.txt");
+    let lines = lines_from_file("./src/inputs/day1_input.txt");
     lines
         .into_iter()
         .map(|l| combine_u32s(get_first(l.clone()), get_last(l)))
