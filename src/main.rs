@@ -1,5 +1,7 @@
 pub mod days;
+use days::common;
 use days::dayone;
+use days::daytwo;
 use std::env;
 
 fn get_day() -> u32 {

@@ -1,16 +1,9 @@
+use crate::common::lines_from_file;
 use std::{
     fs::File,
     io::{prelude::*, BufReader},
     path::Path,
 };
-
-fn lines_from_file(filename: impl AsRef<Path>) -> Vec<String> {
-    let file = File::open(filename).expect("no such file");
-    let buf = BufReader::new(file);
-    buf.lines()
-        .map(|l| l.expect("Could not parse line"))
-        .collect()
-}
 
 fn get_num_from_line(line: String) -> u32 {
     let mut digits = line.chars().filter(|x| x.is_numeric());
@@ -22,9 +15,10 @@ fn get_num_from_line(line: String) -> u32 {
 }
 
 pub fn day_one() -> u32 {
-    let lines = lines_from_file("./src/day1_input.txt");
+    let lines = lines_from_file("./src/inputs/day1_input.txt");
     lines.into_iter().map(get_num_from_line).sum()
 }
+
 fn get_first(line_: String) -> u32 {
     let mut current_chars: Vec<char> = vec![];
     for character in line_.chars() {
@@ -45,6 +39,7 @@ fn get_first(line_: String) -> u32 {
     }
     0
 }
+
 fn get_last(line_: String) -> u32 {
     let mut current_chars: Vec<char> = vec![];
     for character in line_.chars().rev() {
@@ -64,6 +59,7 @@ fn get_last(line_: String) -> u32 {
     }
     0
 }
+
 fn combine_u32s(a: u32, b: u32) -> u32 {
     let combined_str = format!("{}{}", a, b);
 
@@ -76,6 +72,7 @@ fn combine_u32s(a: u32, b: u32) -> u32 {
         }
     }
 }
+
 pub fn day_one_part2() -> u32 {
     let lines = lines_from_file("./src/day1_input.txt");
     lines
