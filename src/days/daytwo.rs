@@ -8,11 +8,11 @@ fn is_set_possible(cubeset: &str, totals: &HashMap<&str, u32>) -> bool {
     let cubes = cubeset.split(",");
 
     for cube in cubes {
-        let num_cubes = cube.strip_prefix(" ")
-        .and_then(|s| s.split_whitespace().next())
-        .and_then(|s| s.parse::<u32>().ok())
-        .unwrap_or_default();
-    
+        let num_cubes = cube
+            .strip_prefix(" ")
+            .and_then(|s| s.split_whitespace().next())
+            .and_then(|s| s.parse::<u32>().ok())
+            .unwrap_or_default();
 
         let cube_colour = cube.split(" ").last().unwrap();
 
@@ -79,11 +79,12 @@ fn power_of_game(line: String) -> u32 {
         let cubes = cubeset.split(",");
 
         for cube in cubes {
-            let num_cubes = cube.strip_prefix(" ")
-            .and_then(|s| s.split_whitespace().next())
-            .and_then(|s| s.parse::<u32>().ok())
-            .unwrap_or_default();
-        
+            let num_cubes = cube
+                .strip_prefix(" ")
+                .and_then(|s| s.split_whitespace().next())
+                .and_then(|s| s.parse::<u32>().ok())
+                .unwrap_or_default();
+
             let cube_colour = cube.split(" ").last().unwrap();
             if num_cubes > colour_counts[cube_colour] {
                 colour_counts.insert(cube_colour, num_cubes);

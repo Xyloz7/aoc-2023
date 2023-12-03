@@ -1,8 +1,8 @@
 pub mod days;
 use days::common;
 use days::dayone;
+use days::daythree;
 use days::daytwo;
-
 use std::env;
 
 fn get_day() -> u32 {
@@ -35,12 +35,16 @@ fn main() {
     let day = get_day();
     match day {
         1 => {
-            println!("Day one part 1 answer is {}", dayone::day_one());
-            println!("Day one part 2 answer is {}", dayone::day_one_part2());
+            println!("Day {} part 1 answer is {}", day, dayone::day_one());
+            println!("Day {} part 2 answer is {}", day, dayone::day_one_part2());
         }
         2 => {
-            println!("Day two part 1 answer is {}", daytwo::day2_part1());
-            println!("Day two part 2 answer is {}", daytwo::day2_part2());
+            println!("Day {} part 2 answer is {}", day, daytwo::day2_part1());
+            println!("Day {} part 2 answer is {}", day, daytwo::day2_part2());
+        }
+        3 => {
+            println!("Day {} part 2 answer is {:?}", day, daythree::part1());
+            println!("Day {} part 2 answer is {:?}", day, daythree::part2());
         }
         _ => println!("Invalid day chosen!"),
     }
