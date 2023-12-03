@@ -4,6 +4,10 @@ use days::dayone;
 use days::daythree;
 use days::daytwo;
 use std::env;
+//
+// Run log:
+// export RUST_LOG=debug && cargo run 3 > log.log 2>&1
+// export RUST_LOG=info
 
 fn get_day() -> u32 {
     // Read a usize from user input
