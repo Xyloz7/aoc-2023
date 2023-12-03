@@ -73,6 +73,8 @@ fn get_adjacent_points(center: (usize, usize), width: i32, height: i32) -> Vec<(
 
 pub fn part1() -> u32 {
     let lines = lines_from_file("./src/inputs/day3.txt");
+    let height = lines.len() as i32;
+    let width = lines.first().unwrap().len() as i32;
     let all_numbers: Vec<Part> = lines
         .clone()
         .into_iter()
@@ -80,7 +82,6 @@ pub fn part1() -> u32 {
         .flat_map(|(line_no, line)| get_no_from_line(line, line_no))
         .collect();
 
-    debug!("Numbers {:?}", all_numbers);
     let mut co_ord_to_part_map: HashMap<&(usize, usize), usize> = HashMap::new();
 
     for (part_index, part) in all_numbers.iter().enumerate() {
@@ -90,21 +91,23 @@ pub fn part1() -> u32 {
     }
     debug!("mapp {:?}", co_ord_to_part_map);
 
-    let mut numbers_to_sum: HashSet<u32> = HashSet::new();
+    let mut indices_to_sum: HashSet<&usize> = HashSet::new();
+    let mut weird_chars: HashSet<char> = HashSet::new();
     for (line_index, line) in lines.into_iter().enumerate() {
         for (character_index, character) in line.chars().enumerate() {
             if !character.is_alphanumeric() && !(character == '.') {
+                weird_chars.insert(character);
                 // Check for adjacent parts
-                let points = get_adjacent_points((character_index, line_index), 10, 10);
+                let points = get_adjacent_points((character_index, line_index), width, height);
                 for p in points {
-                    let value_to_add =
-                        all_numbers[*co_ord_to_part_map.get(&p).unwrap_or(&0)].value();
-                    numbers_to_sum.insert(value_to_add);
+                    indices_to_sum.insert(co_ord_to_part_map.get(&p).unwrap_or(&0));
                 }
             }
         }
     }
-    numbers_to_sum.into_iter().sum()
+    debug!("chars {:?}", weird_chars);
+    debug!("wh {:?} {}", width,height);
+    indices_to_sum.into_iter().fold(0, |acc, x| acc + all_numbers[*x].value())
 }
 pub fn part2() {}
 
