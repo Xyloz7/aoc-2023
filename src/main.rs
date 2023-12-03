@@ -1,7 +1,8 @@
 pub mod days;
 use days::common;
 use days::dayone;
-
+use days::daytwo;
+use log::{debug, error, info, log_enabled, Level};
 use std::env;
 
 fn get_day() -> u32 {
@@ -29,11 +30,16 @@ fn get_day() -> u32 {
     u32_value
 }
 fn main() {
+    env_logger::init();
+
     let day = get_day();
     match day {
         1 => {
             println!("Day one part 1 answer is {}", dayone::day_one());
             println!("Day one part 2 answer is {}", dayone::day_one_part2());
+        }
+        2 => {
+            println!("Day one part 1 answer is {}", daytwo::day2_part1());
         }
         _ => println!("Invalid day chosen!"),
     }

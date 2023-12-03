@@ -1,6 +1,5 @@
 use crate::common::lines_from_file;
 
-
 fn get_num_from_line(line: String) -> u32 {
     let mut digits = line.chars().filter(|x| x.is_numeric());
     let first_ = digits.next().unwrap();
