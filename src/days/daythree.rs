@@ -47,7 +47,7 @@ fn get_adjacent_points(center: (usize, usize), width: i32, height: i32) -> Vec<(
     let mut adjacent_points = Vec::new();
 
     // Define the directions: up, down, left, right
-    let directions: [(i32, i32); 8] = [
+    let directions: [(i32, i32); 9] = [
         (0, 1),
         (0, -1),
         (1, 0),
@@ -56,6 +56,7 @@ fn get_adjacent_points(center: (usize, usize), width: i32, height: i32) -> Vec<(
         (1, -1),
         (1, 1),
         (-1, 1),
+        (-1,-1)
     ];
 
     for &(dx, dy) in &directions {
@@ -91,7 +92,7 @@ pub fn part1() -> u32 {
     }
     debug!("mapp {:?}", co_ord_to_part_map);
 
-    let mut indices_to_sum: HashSet<&usize> = HashSet::new();
+    let mut indices_to_sum: HashSet<usize> = HashSet::new();
     let mut weird_chars: HashSet<char> = HashSet::new();
     for (line_index, line) in lines.into_iter().enumerate() {
         for (character_index, character) in line.chars().enumerate() {
@@ -100,14 +101,16 @@ pub fn part1() -> u32 {
                 // Check for adjacent parts
                 let points = get_adjacent_points((character_index, line_index), width, height);
                 for p in points {
-                    indices_to_sum.insert(co_ord_to_part_map.get(&p).unwrap_or(&0));
+                    // debug!("Point {:?} adj {:?} ", (character_index, line_index),p);
+                    co_ord_to_part_map.get(&p).and_then(|x| Some(indices_to_sum.insert(*x)));
+                    // debug!("Point {:?} ", indices_to_sum);
                 }
             }
         }
     }
     debug!("chars {:?}", weird_chars);
     debug!("wh {:?} {}", width,height);
-    indices_to_sum.into_iter().fold(0, |acc, x| acc + all_numbers[*x].value())
+    indices_to_sum.into_iter().fold(0, |acc, x| acc + all_numbers[x].value())
 }
 pub fn part2() {}
 
