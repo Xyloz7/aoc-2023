@@ -59,8 +59,8 @@ fn get_adjacent_points(center: (usize, usize), width: i32, height: i32) -> Vec<(
     ];
 
     for &(dx, dy) in &directions {
-        let new_x = (center.0 as i32 + dx);
-        let new_y = (center.1 as i32 + dy);
+        let new_x = center.0 as i32 + dx;
+        let new_y = center.1 as i32 + dy;
 
         // Check if the new point is within bounds
         if new_x >= 0 && new_x < width && new_y >= 0 && new_y < height {
@@ -71,7 +71,7 @@ fn get_adjacent_points(center: (usize, usize), width: i32, height: i32) -> Vec<(
     adjacent_points
 }
 
-pub fn part1() -> usize {
+pub fn part1() -> u32 {
     let lines = lines_from_file("./src/inputs/day3.txt");
     let all_numbers: Vec<Part> = lines
         .clone()
@@ -81,23 +81,24 @@ pub fn part1() -> usize {
         .collect();
 
     debug!("Numbers {:?}", all_numbers);
-    let mut co_ord_to_part_map: HashMap<(usize, usize), usize> = HashMap::new();
+    let mut co_ord_to_part_map: HashMap<&(usize, usize), usize> = HashMap::new();
 
-    for (part_index, part) in all_numbers.into_iter().enumerate() {
-        for co_ord in part.co_ords {
+    for (part_index, part) in all_numbers.iter().enumerate() {
+        for co_ord in &part.co_ords {
             co_ord_to_part_map.insert(co_ord, part_index);
         }
     }
+    debug!("mapp {:?}", co_ord_to_part_map);
 
-    let mut numbers_to_sum: HashSet<&usize> = HashSet::new();
+    let mut numbers_to_sum: HashSet<u32> = HashSet::new();
     for (line_index, line) in lines.into_iter().enumerate() {
         for (character_index, character) in line.chars().enumerate() {
             if !character.is_alphanumeric() && !(character == '.') {
                 // Check for adjacent parts
                 let points = get_adjacent_points((character_index, line_index), 10, 10);
-                debug!("Points {:?}", points);
                 for p in points {
-                    let value_to_add = co_ord_to_part_map.get(&p).unwrap_or(&0);
+                    let value_to_add =
+                        all_numbers[*co_ord_to_part_map.get(&p).unwrap_or(&0)].value();
                     numbers_to_sum.insert(value_to_add);
                 }
             }
