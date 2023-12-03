@@ -4,10 +4,6 @@ use log::debug;
 
 use crate::common::lines_from_file;
 
-fn vector_to_number(digits: &[u32]) -> u32 {
-    digits.iter().fold(0, |acc, &digit| (acc * 10) + digit)
-}
-
 #[derive(Debug)]
 pub struct Part {
     digits: Vec<u32>,
@@ -15,8 +11,8 @@ pub struct Part {
 }
 
 impl Part {
-    pub fn value(self: &Self) -> u32 {
-        vector_to_number(&self.digits)
+    fn value(&self) -> u32 {
+        self.digits.iter().fold(0, |acc, &digit| (acc * 10) + digit)
     }
 }
 
@@ -44,32 +40,29 @@ fn get_no_from_line(line: String, line_no: usize) -> Vec<Part> {
 }
 
 fn get_adjacent_points(center: (usize, usize), width: i32, height: i32) -> Vec<(usize, usize)> {
-    let mut adjacent_points = Vec::new();
-
-    // Define the directions: up, down, left, right
-    let directions: [(i32, i32); 9] = [
+    let directions: [(i32, i32); 8] = [
         (0, 1),
         (0, -1),
         (1, 0),
         (-1, 0),
         (1, 1),
         (1, -1),
-        (1, 1),
         (-1, 1),
         (-1, -1),
     ];
 
-    for &(dx, dy) in &directions {
-        let new_x = center.0 as i32 + dx;
-        let new_y = center.1 as i32 + dy;
-
-        // Check if the new point is within bounds
-        if new_x >= 0 && new_x < width && new_y >= 0 && new_y < height {
-            adjacent_points.push((new_x as usize, new_y as usize));
-        }
-    }
-
-    adjacent_points
+    directions
+        .iter()
+        .filter_map(|&(dx, dy)| {
+            let new_x = (center.0 as i32 + dx) as usize;
+            let new_y = (center.1 as i32 + dy) as usize;
+            if new_x < width as usize && new_y < height as usize {
+                Some((new_x, new_y))
+            } else {
+                None
+            }
+        })
+        .collect()
 }
 
 pub fn part1() -> u32 {
