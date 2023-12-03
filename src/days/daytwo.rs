@@ -18,7 +18,7 @@ fn is_set_possible(cubeset: &str, totals: &HashMap<&str, u32>) -> bool {
 
         let cube_colour = cube.split(" ").last().unwrap();
 
-        let is_possible_set = num_cubes < totals[cube_colour];
+        let is_possible_set = num_cubes <= totals[cube_colour];
         if !is_possible_set {
             return false;
         }
@@ -33,12 +33,9 @@ fn is_game_possible(line: String, totals: &HashMap<&str, u32>) -> bool {
         .split(";");
 
     for cubeset in cubesets {
-        debug!(
-            "Set {} is possible? {}",
-            cubeset,
-            is_set_possible(cubeset, totals)
-        );
-        if !is_set_possible(cubeset, totals) {
+        let set_possible = is_set_possible(cubeset, totals);
+        debug!("Set {} is possible? {}", cubeset, set_possible);
+        if !set_possible {
             return false;
         }
     }
@@ -54,17 +51,17 @@ pub fn day2_part1() -> usize {
 
     let lines = lines_from_file("./src/inputs/day2.txt");
     for (i, line) in lines.into_iter().enumerate() {
-        debug!(
-            "Game {} is possible? {}\n",
-            line,
-            is_game_possible(line.clone(), &totals)
-        );
+        let game_possible = is_game_possible(line.clone(), &totals);
+        debug!("Game {} is possible? {}\n", i + 1, game_possible);
 
-        if is_game_possible(line, &totals) {
+        if game_possible {
             id_sum += i + 1
         }
     }
 
     debug!("Sum of valid Ids is {}", id_sum);
     id_sum
+}
+pub fn day2_part2() -> usize {
+    1
 }

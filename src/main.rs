@@ -2,7 +2,7 @@ pub mod days;
 use days::common;
 use days::dayone;
 use days::daytwo;
-use log::{debug, error, info, log_enabled, Level};
+
 use std::env;
 
 fn get_day() -> u32 {
@@ -39,7 +39,8 @@ fn main() {
             println!("Day one part 2 answer is {}", dayone::day_one_part2());
         }
         2 => {
-            println!("Day one part 1 answer is {}", daytwo::day2_part1());
+            println!("Day two part 1 answer is {}", daytwo::day2_part1());
+            println!("Day two part 2 answer is {}", daytwo::day2_part2());
         }
         _ => println!("Invalid day chosen!"),
     }
