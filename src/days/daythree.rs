@@ -56,7 +56,7 @@ fn get_adjacent_points(center: (usize, usize), width: i32, height: i32) -> Vec<(
         (1, -1),
         (1, 1),
         (-1, 1),
-        (-1,-1)
+        (-1, -1),
     ];
 
     for &(dx, dy) in &directions {
@@ -102,23 +102,83 @@ pub fn part1() -> u32 {
                 let points = get_adjacent_points((character_index, line_index), width, height);
                 for p in points {
                     // debug!("Point {:?} adj {:?} ", (character_index, line_index),p);
-                    co_ord_to_part_map.get(&p).and_then(|x| Some(indices_to_sum.insert(*x)));
+                    co_ord_to_part_map
+                        .get(&p)
+                        .and_then(|x| Some(indices_to_sum.insert(*x)));
                     // debug!("Point {:?} ", indices_to_sum);
                 }
             }
         }
     }
     debug!("chars {:?}", weird_chars);
-    debug!("wh {:?} {}", width,height);
-    indices_to_sum.into_iter().fold(0, |acc, x| acc + all_numbers[x].value())
+    debug!("wh {:?} {}", width, height);
+    indices_to_sum
+        .into_iter()
+        .fold(0, |acc, x| acc + all_numbers[x].value())
 }
-pub fn part2() {}
 
-// Iterate till you hit a symbol.
-// Check the adjacent co-ords
-// If any are a number, trace to r/l till you get the full number.
-// replace the number with dots
+struct Gear {
+    pub adjacent_part_indices: HashSet<usize>,
+}
 
-// Iterate and extract all numbers.
-// For each make an ID, and store is_adj=false and adj_co_ords
-// If symbol in adj_coords, update
+impl Gear {
+    fn is_valid(self: &Self) -> bool {
+        self.adjacent_part_indices.len() == 2
+    }
+    fn ratio(self: &Self, index_to_part: &Vec<Part>) -> u32 {
+        if self.is_valid() {
+            self.adjacent_part_indices
+                .iter()
+                .fold(1, |acc, x| acc * index_to_part[*x].value())
+        } else {
+            0
+        }
+    }
+}
+
+pub fn part2() -> u32 {
+    let lines = lines_from_file("./src/inputs/day3.txt");
+    let height = lines.len() as i32;
+    let width = lines.first().unwrap().len() as i32;
+    let all_parts: Vec<Part> = lines
+        .clone()
+        .into_iter()
+        .enumerate()
+        .flat_map(|(line_no, line)| get_no_from_line(line, line_no))
+        .collect();
+
+    let mut co_ord_to_part_map: HashMap<&(usize, usize), usize> = HashMap::new();
+
+    for (part_index, part) in all_parts.iter().enumerate() {
+        for co_ord in &part.co_ords {
+            co_ord_to_part_map.insert(co_ord, part_index);
+        }
+    }
+    debug!("mapp {:?}", co_ord_to_part_map);
+
+    let mut gears: Vec<Gear> = vec![];
+    for (line_index, line) in lines.into_iter().enumerate() {
+        for (character_index, character) in line.chars().enumerate() {
+            if character == '*' {
+                let mut current_gear = Gear {
+                    adjacent_part_indices: HashSet::new(),
+                };
+                // Check for adjacent parts
+                let points = get_adjacent_points((character_index, line_index), width, height);
+                for p in points {
+                    // debug!("Point {:?} adj {:?} ", (character_index, line_index),p);
+                    co_ord_to_part_map
+                        .get(&p)
+                        .and_then(|x| Some(current_gear.adjacent_part_indices.insert(*x)));
+                    // debug!("Point {:?} ", indices_to_sum);
+                }
+                gears.push(current_gear);
+            }
+        }
+    }
+    debug!("chars {:?}", weird_chars);
+    debug!("wh {:?} {}", width, height);
+    gears
+        .into_iter()
+        .fold(0, |acc, x| acc + x.ratio(&all_parts))
+}
