@@ -26,6 +26,7 @@ fn is_set_possible(cubeset: &str, totals: &HashMap<&str, u32>) -> bool {
     }
     true
 }
+
 fn is_game_possible(line: String, totals: &HashMap<&str, u32>) -> bool {
     let cubesets = line
         .split(":")
@@ -42,6 +43,7 @@ fn is_game_possible(line: String, totals: &HashMap<&str, u32>) -> bool {
     }
     true
 }
+
 pub fn day2_part1() -> usize {
     let mut totals: HashMap<&str, u32> = HashMap::new();
     totals.insert("red", 12);
@@ -100,6 +102,7 @@ fn power_of_game(line: String) -> u32 {
 }
 
 pub fn day2_part2() -> u32 {
-    let lines = lines_from_file("./src/inputs/day2.txt");
-    lines.into_iter().fold(0, |acc, l| acc + power_of_game(l))
+    lines_from_file("./src/inputs/day2.txt")
+        .into_iter()
+        .fold(0, |acc, l| acc + power_of_game(l))
 }
