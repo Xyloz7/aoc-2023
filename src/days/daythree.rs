@@ -176,7 +176,6 @@ pub fn part2() -> u32 {
             }
         }
     }
-    debug!("chars {:?}", weird_chars);
     debug!("wh {:?} {}", width, height);
     gears
         .into_iter()
