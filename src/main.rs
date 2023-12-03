@@ -1,8 +1,5 @@
 pub mod days;
-use days::common;
-use days::dayone;
-use days::daythree;
-use days::daytwo;
+use days::{common, dayfour, dayone, daythree, daytwo};
 use std::env;
 //
 // Run log:
@@ -43,12 +40,16 @@ fn main() {
             println!("Day {} part 2 answer is {}", day, dayone::day_one_part2());
         }
         2 => {
-            println!("Day {} part 2 answer is {}", day, daytwo::day2_part1());
+            println!("Day {} part 1 answer is {}", day, daytwo::day2_part1());
             println!("Day {} part 2 answer is {}", day, daytwo::day2_part2());
         }
         3 => {
-            println!("Day {} part 2 answer is {:?}", day, daythree::part1());
+            println!("Day {} part 1 answer is {:?}", day, daythree::part1());
             println!("Day {} part 2 answer is {:?}", day, daythree::part2());
+        }
+        4 => {
+            println!("Day {} part 1 answer is {:?}", day, dayfour::part1());
+            println!("Day {} part 2 answer is {:?}", day, dayfour::part2());
         }
         _ => println!("Invalid day chosen!"),
     }
