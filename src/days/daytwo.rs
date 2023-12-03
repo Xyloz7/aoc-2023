@@ -1,3 +1,4 @@
+use core::num;
 use log::debug;
 use std::collections::HashMap;
 
@@ -62,6 +63,43 @@ pub fn day2_part1() -> usize {
     debug!("Sum of valid Ids is {}", id_sum);
     id_sum
 }
-pub fn day2_part2() -> usize {
-    1
+
+fn power_of_game(line: String) -> u32 {
+    let mut colour_counts: HashMap<&str, u32> = HashMap::new();
+    colour_counts.insert("red", 0);
+    colour_counts.insert("green", 0);
+    colour_counts.insert("blue", 0);
+
+    let cubesets = line
+        .split(":")
+        .last()
+        .expect("All lines should start with Game :")
+        .split(";");
+
+    for cubeset in cubesets {
+        let cubes = cubeset.split(",");
+
+        for cube in cubes {
+            let num_cubes = cube
+                .strip_prefix(" ")
+                .unwrap()
+                .split(" ")
+                .next()
+                .unwrap()
+                .parse::<u32>()
+                .unwrap();
+
+            let cube_colour = cube.split(" ").last().unwrap();
+            if num_cubes > colour_counts[cube_colour] {
+                colour_counts.insert(cube_colour, num_cubes);
+            }
+        }
+    }
+
+    colour_counts.into_iter().fold(1, |acc, (_, v)| acc * v)
+}
+
+pub fn day2_part2() -> u32 {
+    let lines = lines_from_file("./src/inputs/day2.txt");
+    lines.into_iter().fold(0, |acc, l| acc + power_of_game(l))
 }
