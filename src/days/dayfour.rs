@@ -17,8 +17,9 @@ fn card_score(winning: &HashSet<u32>, actual: &HashSet<u32>) -> u32 {
 pub fn part1() -> u32 {
     let lines = lines_from_file("./src/inputs/day4.txt");
     let mut total_score = 0;
+    let skip_n = lines.first().unwrap().split(":").next().unwrap().len() + 1;
     for line in lines {
-        let lotto_numbers: String = line.chars().skip(9).collect();
+        let lotto_numbers: String = line.chars().skip(skip_n).collect();
         let mut number_sets = lotto_numbers.split(" | ");
         let winning_numbers: HashSet<u32> = number_sets
             .next()
