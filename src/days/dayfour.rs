@@ -54,7 +54,7 @@ fn card_score2(winning: &HashSet<u32>, actual: &HashSet<u32>) -> u32 {
 
 fn create_map(n: u32) -> HashMap<u32, u32> {
     let mut map = HashMap::new();
-    for i in 0..=n-1 {
+    for i in 0..=n - 1 {
         map.insert(i, 1);
     }
     map
@@ -68,11 +68,10 @@ pub fn part2() -> u32 {
     for (card_id, line) in lines.into_iter().enumerate() {
         let (winning_numbers, scratchcard_numbers) = get_number_sets(line, skip_n);
         let cards_won = card_score2(&winning_numbers, &scratchcard_numbers);
-        for _ in 0..card_count[&(card_id as u32)] {
-            for i in 1..=cards_won {
-                let key = (card_id as u32 + i).min(total_cards);
-                card_count.entry(key).and_modify(|x| *x += 1);
-            }
+        let copies = card_count[&(card_id as u32)];
+        for i in 1..=cards_won {
+            let key = (card_id as u32 + i).min(total_cards);
+            card_count.entry(key).and_modify(|x| *x += 1 * copies);
         }
 
         debug!(
